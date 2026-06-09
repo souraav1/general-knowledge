@@ -97,6 +97,13 @@
 
     <!-- सभी प्रश्न Gemini.txt से पार्स किए गए - हिंदी संस्करण -->
     <script src="questions_gemini_hi.js"></script>
+    <script>
+        // यह सुनिश्चित करता है कि हिंदी प्रश्न लोड हुए हैं
+        if (typeof questions_gemini_hi === 'undefined') {
+            console.error('हिंदी प्रश्न फ़ाइल लोड नहीं हुई। questions_gemini_hi.js को सर्वर पर जांचें।');
+            alert('त्रुटि: हिंदी प्रश्न फ़ाइल लोड नहीं हुई।');
+        }
+    </script>
     <!-- मुख्य ऐप लॉजिक -->
     <script src="script-hi.js"></script>
 </body>
