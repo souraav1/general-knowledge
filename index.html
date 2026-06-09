@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uttarakhand &amp; UPSC Master Quiz</title>
+    <meta name="description" content="A comprehensive quiz app for UKPSC and UPSC exam preparation covering Uttarakhand GK, Indian Polity, History, Geography, Economy and Science.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="blob-c"></div>
+    <div class="blob-b"></div>
+    
+    <div id="topic-dashboard" class="topic-dashboard">
+        <div class="dashboard-header">
+            <h1>Uttarakhand &amp; UPSC Master Quiz</h1>
+            <p>Select a topic to start practicing. All questions sourced from curated GK material.</p>
+        </div>
+        <div class="topic-grid">
+            <div class="topic-card" data-topic="weak">
+                <div class="topic-icon">⚠️</div>
+                <h3>Weak Areas</h3>
+                <p>Questions marked as incorrect. Practice these again.</p>
+            </div>
+            <div class="topic-card" data-topic="ukgk">
+                <div class="topic-icon">🏔️</div>
+                <h3>Uttarakhand GK</h3>
+                <p>Geography, culture, history, polity &amp; more — specific to UKPSC</p>
+            </div>
+            <div class="topic-card" data-topic="india_gk">
+                <div class="topic-icon">🇮🇳</div>
+                <h3>India GK</h3>
+                <p>Polity, history, geography, economy, science &amp; current affairs</p>
+            </div>
+            <div class="topic-card" data-topic="history">
+                <div class="topic-icon">🏛️</div>
+                <h3>Indian History</h3>
+                <p>Ancient, medieval, modern &amp; the freedom struggle</p>
+            </div>
+            <div class="topic-card" data-topic="geography">
+                <div class="topic-icon">🌍</div>
+                <h3>Geography</h3>
+                <p>Physical, Indian &amp; world geography — rivers, climate, minerals</p>
+            </div>
+            <div class="topic-card" data-topic="polity">
+                <div class="topic-icon">⚖️</div>
+                <h3>Indian Polity</h3>
+                <p>Constitution, fundamental rights, parliament &amp; governance</p>
+            </div>
+            <div class="topic-card" data-topic="economy_science">
+                <div class="topic-icon">📈</div>
+                <h3>Economy, Environment &amp; Science</h3>
+                <p>Agriculture, banking, environment, technology &amp; general science</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="app-container hidden" id="app-container">
+        <header>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="header-content">
+                <button id="back-btn" class="btn secondary-btn back-btn" title="Back to Topics">🏠</button>
+                <h1 id="quiz-title">Uttarakhand GK Mastery</h1>
+                <span class="question-tracker" id="question-tracker">Question 1 / 0</span>
+            </div>
+        </header>
+
+        <main class="card glass-card">
+            <div class="question-container">
+                <p id="question-text" class="question-text">Loading question...</p>
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="answer-input" class="answer-input" placeholder="Type your answer here..." autocomplete="off">
+                <p class="instruction-text">Press <strong>Enter &#x21B5;</strong> to reveal answer &nbsp;|&nbsp; After reveal: <strong>1</strong> = correct, <strong>2</strong> = incorrect &nbsp;|&nbsp; <strong>Enter &#x21B5;</strong> = next</p>
+            </div>
+
+            <div id="answer-reveal" class="answer-reveal hidden">
+                <div class="answer-label">&#x2705; Correct Answer</div>
+                <p id="correct-answer-text" class="correct-answer-text"></p>
+                <div class="action-buttons">
+                    <button id="next-btn" class="btn primary-btn">Next Question <span>&#x2192;</span></button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="controls">
+                <button id="prev-btn" class="btn secondary-btn" disabled>&#x2190; Previous</button>
+                <button id="random-btn" class="btn secondary-btn">&#x1F3B2; Random</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- All questions parsed from Gemini.txt -->
+    <script src="questions_gemini.js"></script>
+    <!-- Main app logic -->
+    <script src="script.js"></script>
+</body>
+</html>

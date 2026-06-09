@@ -1,0 +1,450 @@
+:root {
+    --bg-color: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-color: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.5);
+    --success-color: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background Animated Blobs for Premium Aesthetic */
+.blob-c, .blob-b {
+    position: absolute;
+    filter: blur(100px);
+    z-index: -1;
+    opacity: 0.6;
+    border-radius: 50%;
+    animation: drift 20s infinite alternate linear;
+}
+
+.blob-c {
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, #3b82f644, transparent 70%);
+    top: -10%;
+    left: -10%;
+}
+
+.blob-b {
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, #8b5cf644, transparent 70%);
+    bottom: -20%;
+    right: -10%;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(20px, 50px) scale(1.1); }
+}
+
+.app-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    width: 0%;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.question-tracker {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.score-badge {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #34d399;
+    letter-spacing: 0.5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.score-badge.score-flash {
+    background: rgba(16, 185, 129, 0.45);
+    color: #fff;
+    animation: scorePop 0.5s ease;
+}
+
+@keyframes scorePop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.question-container {
+    margin-bottom: 2rem;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-text {
+    font-size: 1.8rem;
+    line-height: 1.4;
+    font-weight: 500;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 1rem;
+    min-height: 90px;       /* lock height so answer section never moves */
+    transition: opacity 0.25s ease;
+}
+
+.answer-input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.answer-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    background: rgba(15, 23, 42, 0.8);
+}
+
+.instruction-text {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+/* Answer Reveal Area — always in flow, fade in/out only */
+.answer-reveal {
+    margin-top: 1.5rem;
+    padding: 1.5rem 2rem;
+    background: var(--success-bg);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 16px;
+    text-align: center;
+    display: flex !important;   /* always in flow — overrides .hidden utility */
+    flex-direction: column;
+    gap: 1.2rem;
+    min-height: 140px;          /* reserve space so layout never shifts */
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.answer-reveal.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+    /* display stays flex — never leaves flow */
+}
+
+.answer-label {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--success-color);
+}
+
+.correct-answer-text {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Buttons */
+.btn {
+    padding: 0.8rem 1.8rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+}
+
+.primary-btn span {
+    transition: transform 0.2s ease;
+}
+
+.primary-btn:hover span {
+    transform: translateX(4px);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.secondary-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--card-border);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.secondary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Topic Dashboard */
+.topic-dashboard {
+    width: 100%;
+    max-width: 1000px;
+    padding: 2rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.dashboard-header {
+    text-align: center;
+}
+
+.dashboard-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.q-count {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.2rem 0.65rem;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #60a5fa;
+    letter-spacing: 0.5px;
+}
+
+.topic-card {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.topic-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+}
+
+.topic-card:hover::before {
+    opacity: 1;
+}
+
+.topic-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.topic-card h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.topic-card p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
+.back-btn {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.back-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.header-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .topic-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .dashboard-header h1 { font-size: 2.2rem; }
+    .topic-grid { grid-template-columns: 1fr; }
+    .back-btn { position: relative; top: 0; transform: none; align-self: flex-start; margin-bottom: 1rem; }
+}
+
+@media (max-width: 600px) {
+    .glass-card { padding: 2rem 1.5rem; }
+    .header-content h1 { font-size: 2rem; }
+    .question-text { font-size: 1.4rem; }
+    .answer-input { font-size: 1rem; }
+    .app-container { padding: 1rem; }
+}
