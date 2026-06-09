@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>उत्तराखंड और यूपीएससी मास्टर क्विज</title>
+    <meta name="description" content="यूकेपीएससी और यूपीएससी परीक्षा की तैयारी के लिए एक व्यापक क्विज ऐप जो उत्तराखंड जीके, भारतीय राजनीति, इतिहास, भूगोल, अर्थव्यवस्था और विज्ञान को कवर करता है।">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="blob-c"></div>
+    <div class="blob-b"></div>
+    
+    <div id="topic-dashboard" class="topic-dashboard">
+        <div class="dashboard-header">
+            <h1>उत्तराखंड और यूपीएससी मास्टर क्विज</h1>
+            <p>अभ्यास शुरू करने के लिए एक विषय चुनें। सभी प्रश्न क्यूरेटेड जीके सामग्री से लिए गए हैं।</p>
+        </div>
+        <div class="topic-grid">
+            <div class="topic-card" data-topic="weak">
+                <div class="topic-icon">⚠️</div>
+                <h3>कमजोर क्षेत्र</h3>
+                <p>गलत के रूप में चिह्नित प्रश्न। इन्हें फिर से अभ्यास करें।</p>
+            </div>
+            <div class="topic-card" data-topic="ukgk">
+                <div class="topic-icon">🏔️</div>
+                <h3>उत्तराखंड जीके</h3>
+                <p>भूगोल, संस्कृति, इतिहास, राजनीति और अधिक — यूकेपीएससी के लिए विशिष्ट</p>
+            </div>
+            <div class="topic-card" data-topic="india_gk">
+                <div class="topic-icon">🇮🇳</div>
+                <h3>भारत जीके</h3>
+                <p>राजनीति, इतिहास, भूगोल, अर्थव्यवस्था, विज्ञान और समसामयिकी</p>
+            </div>
+            <div class="topic-card" data-topic="history">
+                <div class="topic-icon">🏛️</div>
+                <h3>भारतीय इतिहास</h3>
+                <p>प्राचीन, मध्यकालीन, आधुनिक और स्वतंत्रता संग्राम</p>
+            </div>
+            <div class="topic-card" data-topic="geography">
+                <div class="topic-icon">🌍</div>
+                <h3>भूगोल</h3>
+                <p>भौतिक, भारतीय और विश्व भूगोल — नदियां, जलवायु, खनिज</p>
+            </div>
+            <div class="topic-card" data-topic="polity">
+                <div class="topic-icon">⚖️</div>
+                <h3>भारतीय राजनीति</h3>
+                <p>संविधान, मौलिक अधिकार, संसद और शासन</p>
+            </div>
+            <div class="topic-card" data-topic="economy_science">
+                <div class="topic-icon">📈</div>
+                <h3>अर्थव्यवस्था, पर्यावरण और विज्ञान</h3>
+                <p>कृषि, बैंकिंग, पर्यावरण, प्रौद्योगिकी और सामान्य विज्ञान</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="app-container hidden" id="app-container">
+        <header>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="header-content">
+                <button id="back-btn" class="btn secondary-btn back-btn" title="विषय पर वापस जाएं">🏠</button>
+                <h1 id="quiz-title">उत्तराखंड जीके निपुणता</h1>
+                <span class="question-tracker" id="question-tracker">प्रश्न 1 / 0</span>
+            </div>
+        </header>
+
+        <main class="card glass-card">
+            <div class="question-container">
+                <p id="question-text" class="question-text">प्रश्न लोड हो रहा है...</p>
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="answer-input" class="answer-input" placeholder="यहाँ अपना उत्तर टाइप करें..." autocomplete="off">
+                <p class="instruction-text">उत्तर प्रकट करने के लिए <strong>Enter &#x21B5;</strong> दबाएं &nbsp;|&nbsp; प्रकट करने के बाद: <strong>1</strong> = सही, <strong>2</strong> = गलत &nbsp;|&nbsp; <strong>Enter &#x21B5;</strong> = अगला</p>
+            </div>
+
+            <div id="answer-reveal" class="answer-reveal hidden">
+                <div class="answer-label">✅ सही उत्तर</div>
+                <p id="correct-answer-text" class="correct-answer-text"></p>
+                <div class="action-buttons">
+                    <button id="next-btn" class="btn primary-btn">अगला प्रश्न <span>&#x2192;</span></button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="controls">
+                <button id="prev-btn" class="btn secondary-btn" disabled>&#x2190; पिछला</button>
+                <button id="random-btn" class="btn secondary-btn">&#x1F3B2; यादृच्छिक</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- सभी प्रश्न Gemini.txt से पार्स किए गए - हिंदी संस्करण -->
+    <script src="questions_gemini_hi.js"></script>
+    <script>
+        // यह सुनिश्चित करता है कि हिंदी प्रश्न लोड हुए हैं
+        if (typeof questions_gemini_hi === 'undefined') {
+            console.error('हिंदी प्रश्न फ़ाइल लोड नहीं हुई। questions_gemini_hi.js को सर्वर पर जांचें।');
+        }
+    </script>
+    <!-- मुख्य ऐप लॉजिक -->
+    <script src="script.js"></script>
+</body>
+</html>

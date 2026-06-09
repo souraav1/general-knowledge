@@ -81,6 +81,19 @@
             <div id="answer-reveal" class="answer-reveal hidden">
                 <div class="answer-label">&#x2705; Correct Answer</div>
                 <p id="correct-answer-text" class="correct-answer-text"></p>
+                
+                <div id="explanation-card" class="explanation-card hidden">
+                    <div class="explanation-header">
+                        <span class="explanation-icon">💡</span>
+                        <span class="explanation-title">Deep Dive Explanation</span>
+                    </div>
+                    <p id="explanation-text" class="explanation-text">Loading explanation...</p>
+                    <div class="explanation-loader hidden" id="explanation-loader">
+                        <div class="spinner"></div>
+                        <span>Generating explanation...</span>
+                    </div>
+                </div>
+                
                 <div class="action-buttons">
                     <button id="next-btn" class="btn primary-btn">Next Question <span>&#x2192;</span></button>
                 </div>

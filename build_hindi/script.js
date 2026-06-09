@@ -1,37 +1,32 @@
-// Questions are loaded from questions_gemini.js (auto-generated from Gemini.txt)
-// const questions_gemini = { ukgk: [...], india_polity: [...], ... }
-
-// Backend URL - change this to your deployed backend URL
-const BACKEND_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000'
-    : 'https://your-deployed-backend-url.com'; // Replace with your deployed URL
+// प्रश्न questions_gemini_hi.js से लोड किए जाते हैं (Gemini.txt से ऑटो-जेनरेट किए गए हिंदी संस्करण)
+// const questions_gemini_hi = { ukgk: [...], india_polity: [...], ... }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ── DOM Elements ──────────────────────────────────────────
+    // ── DOM तत्व ──────────────────────────────────────────────
     const topicDashboard  = document.getElementById('topic-dashboard');
     const appContainer    = document.getElementById('app-container');
     const topicCards      = document.querySelectorAll('.topic-card');
     const backBtn         = document.getElementById('back-btn');
     const quizTitle       = document.getElementById('quiz-title');
 
-    // ── Global State ──────────────────────────────────────────
+    // ── वैश्विक स्थिति ──────────────────────────────────────────
     let weakQuestions = JSON.parse(localStorage.getItem('weakQuestions')) || [];
 
-    // ── Inject question-count badges ──────────────────────────
+    // ── प्रश्न-गणना बैज इंजेक्ट करें ──────────────────────────
     topicCards.forEach(card => {
         const topic = card.getAttribute('data-topic');
         let count = 0;
         if (topic === 'weak') {
             count = weakQuestions.length;
-        } else if (typeof questions_gemini !== 'undefined' && questions_gemini[topic]) {
-            count = questions_gemini[topic].length;
+        } else if (typeof questions_gemini_hi !== 'undefined' && questions_gemini_hi[topic]) {
+            count = questions_gemini_hi[topic].length;
         }
 
         if (count > 0 || topic === 'weak') {
             const badge = document.createElement('span');
             badge.className = 'q-count';
             badge.id = `badge-${topic}`;
-            badge.textContent = `${count} questions`;
+            badge.textContent = `${count} प्रश्न`;
             card.appendChild(badge);
         }
     });
@@ -46,20 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn          = document.getElementById('next-btn');
     const prevBtn          = document.getElementById('prev-btn');
     const randomBtn        = document.getElementById('random-btn');
-    const explanationCard  = document.getElementById('explanation-card');
-    const explanationText  = document.getElementById('explanation-text');
-    const explanationLoader= document.getElementById('explanation-loader');
 
-    // ── State ─────────────────────────────────────────────────
+    // ── स्थिति ─────────────────────────────────────────────────
     let currentQuestions = [];
     let currentIndex     = 0;
     let totalQuestions   = 0;
     let isRevealed       = false;
-    let correctCount     = 0;          // running tally of correct answers
-    let markedCorrect    = new Set();  // tracks which question indices were marked correct
-    let markedIncorrect  = new Set();  // tracks which question indices were marked incorrect
+    let correctCount     = 0;          // सही उत्तरों की चल रही गिनती
+    let markedCorrect    = new Set();  // ट्रैक करता है कि कौन से प्रश्न सही चिह्नित हैं
+    let markedIncorrect  = new Set();  // ट्रैक करता है कि कौन से प्रश्न गलत चिह्नित हैं
 
-    // ── Dashboard ─────────────────────────────────────────────
+    // ── डैशबोर्ड ─────────────────────────────────────────────
     topicCards.forEach(card => {
         card.addEventListener('click', () => {
             const topic    = card.getAttribute('data-topic');
@@ -79,33 +71,33 @@ document.addEventListener('DOMContentLoaded', () => {
         markedIncorrect  = new Set();
         updateScoreDisplay();
 
-        // Update weak questions count badge
+        // कमजोर प्रश्न गणना बैज अपडेट करें
         const weakBadge = document.getElementById('badge-weak');
         if (weakBadge) {
-            weakBadge.textContent = `${weakQuestions.length} questions`;
+            weakBadge.textContent = `${weakQuestions.length} प्रश्न`;
         }
     }
 
-    // ── Start Quiz ────────────────────────────────────────────
+    // ── क्विज शुरू करें ────────────────────────────────────────────
     function startQuiz(topic, topicName) {
-        // Pull from questions_gemini (the new unified source) or weakQuestions
+        // questions_gemini (नया एकीकृत स्रोत) या weakQuestions से खींचें
         let dataset = [];
         if (topic === 'weak') {
             dataset = [...weakQuestions];
-        } else if (typeof questions_gemini !== 'undefined' && questions_gemini[topic]) {
-            dataset = [...questions_gemini[topic]];
+        } else if (typeof questions_gemini_hi !== 'undefined' && questions_gemini_hi[topic]) {
+            dataset = [...questions_gemini_hi[topic]];
         }
 
         if (dataset.length === 0) {
             if (topic === 'weak') {
-                alert('You have no weak questions saved yet! Mark some questions as incorrect (press 2) during a quiz to add them here.');
+                alert('आपके पास अभी तक कोई कमजोर प्रश्न सहेजे नहीं गए हैं! क्विज के दौरान कुछ प्रश्नों को गलत के रूप में चिह्नित करें (2 दबाएं) उन्हें यहाँ जोड़ने के लिए।');
             } else {
-                alert('Questions for this topic are currently unavailable.');
+                alert('इस विषय के लिए प्रश्न वर्तमान में उपलब्ध नहीं हैं।');
             }
             return;
         }
 
-        // Shuffle (Fisher-Yates)
+        // शफल (Fisher-Yates)
         for (let i = dataset.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [dataset[i], dataset[j]] = [dataset[j], dataset[i]];
@@ -126,21 +118,21 @@ document.addEventListener('DOMContentLoaded', () => {
         loadQuestion(currentIndex);
     }
 
-    // ── Score display helper ──────────────────────────────────
+    // ── स्कोर डिस्प्ले हेल्पर ──────────────────────────────────
     function updateScoreDisplay() {
         let badge = document.getElementById('score-badge');
         if (!badge) {
             badge = document.createElement('span');
             badge.id = 'score-badge';
             badge.className = 'score-badge';
-            // Insert beside the question tracker in the header
+            // प्रश्न ट्रैकर के बगल में डालें
             const tracker = document.getElementById('question-tracker');
             tracker.parentNode.insertBefore(badge, tracker.nextSibling);
         }
-        badge.textContent = `✅ ${correctCount} correct`;
+        badge.textContent = `✅ ${correctCount} सही`;
     }
 
-    // ── Keyboard ──────────────────────────────────────────────
+    // ── कीबोर्ड ──────────────────────────────────────────────
     document.addEventListener('keydown', (e) => {
         if (appContainer.classList.contains('hidden')) return;
 
@@ -168,14 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 correctCount++;
                 updateScoreDisplay();
 
-                // Brief visual flash on the badge
+                // बैज पर संक्षिप्त दृश्य फ्लैश
                 const badge = document.getElementById('score-badge');
                 if (badge) {
                     badge.classList.add('score-flash');
                     setTimeout(() => badge.classList.remove('score-flash'), 500);
                 }
 
-                // If practising a weak question and getting it right, remove it from weakQuestions
+                // यदि कमजोर प्रश्न का अभ्यास कर रहे हैं और सही हो रहे हैं, तो इसे weakQuestions से हटा दें
                 const currentQ = currentQuestions[currentIndex];
                 const wIdx = weakQuestions.findIndex(q => q.question === currentQ.question);
                 if (wIdx > -1) {
@@ -183,32 +175,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('weakQuestions', JSON.stringify(weakQuestions));
                 }
 
-                // Visual feedback for marking correct
+                // सही चिह्नित करने के लिए दृश्य प्रतिक्रिया
                 const answerLabel = document.querySelector('.answer-label');
                 const origText = answerLabel.innerHTML;
-                answerLabel.innerHTML = '✅ Marked Correct';
+                answerLabel.innerHTML = '✅ सही चिह्नित किया गया';
                 answerLabel.style.color = 'var(--success-color, #10b981)';
                 setTimeout(() => {
                     answerLabel.innerHTML = origText;
-                    answerLabel.style.color = ''; // Reset
+                    answerLabel.style.color = ''; // रीसेट करें
                 }, 1000);
             }
         }
 
-        // Press '2' after reveal to mark current question as incorrect
+        // प्रकट करने के बाद '2' दबाएं वर्तमान प्रश्न को गलत के रूप में चिह्नित करने के लिए
         if (e.key === '2' && isRevealed) {
             e.preventDefault();
             if (!markedIncorrect.has(currentIndex)) {
                 markedIncorrect.add(currentIndex);
 
-                // Undo correct count if previously marked correct
+                // यदि पहले से सही चिह्नित है तो सही गणना को पूर्ववत करें
                 if (markedCorrect.has(currentIndex)) {
                     markedCorrect.delete(currentIndex);
                     correctCount--;
                     updateScoreDisplay();
                 }
 
-                // Add to weakQuestions if not already there
+                // यदि पहले से वहाँ नहीं है तो weakQuestions में जोड़ें
                 const currentQ = currentQuestions[currentIndex];
                 const exists = weakQuestions.some(q => q.question === currentQ.question);
                 if (!exists) {
@@ -216,14 +208,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('weakQuestions', JSON.stringify(weakQuestions));
                 }
 
-                // Visual feedback for marking incorrect
+                // गलत चिह्नित करने के लिए दृश्य प्रतिक्रिया
                 const answerLabel = document.querySelector('.answer-label');
                 const origText = answerLabel.innerHTML;
-                answerLabel.innerHTML = '❌ Marked Incorrect';
-                answerLabel.style.color = '#ef4444'; // Red color for error
+                answerLabel.innerHTML = '❌ गलत चिह्नित किया गया';
+                answerLabel.style.color = '#ef4444'; // त्रुटि के लिए लाल रंग
                 setTimeout(() => {
                     answerLabel.innerHTML = origText;
-                    answerLabel.style.color = ''; // Reset
+                    answerLabel.style.color = ''; // रीसेट करें
                 }, 1000);
             }
         }
@@ -233,40 +225,38 @@ document.addEventListener('DOMContentLoaded', () => {
     prevBtn.addEventListener('click',   goToPrev);
     randomBtn.addEventListener('click', loadRandom);
 
-    // ── Load Question ─────────────────────────────────────────
+    // ── प्रश्न लोड करें ─────────────────────────────────────────
     function loadQuestion(index) {
         if (index < 0 || index >= totalQuestions) return;
 
         const q = currentQuestions[index];
 
-        // Animate question text change
+        // प्रश्न पाठ परिवर्तन को एनिमेट करें
         questionText.style.animation = 'none';
         void questionText.offsetHeight; // reflow
         questionText.style.animation  = null;
 
         questionText.textContent       = q.question;
-        questionTracker.textContent    = `Question ${index + 1} / ${totalQuestions}`;
-        correctAnswerText.textContent  = q.answer;       // pre-set (keeps layout stable)
+        questionTracker.textContent    = `प्रश्न ${index + 1} / ${totalQuestions}`;
+        correctAnswerText.textContent  = q.answer;       // पहले से सेट करें (लेआउट स्थिर रखता है)
 
         const pct = ((index + 1) / totalQuestions) * 100;
         progressBar.style.width = `${pct}%`;
 
-        // Reset state
+        // स्थिति रीसेट करें
         isRevealed = false;
         answerInput.value       = '';
         answerInput.disabled    = false;
         answerInput.focus();
 
         answerReveal.classList.add('hidden');
-        explanationCard.classList.add('hidden');
-        explanationLoader.classList.add('hidden');
         inputContainer.style.opacity       = '1';
         inputContainer.style.pointerEvents = 'auto';
 
         prevBtn.disabled = (index === 0);
     }
 
-    // ── Reveal Answer ─────────────────────────────────────────
+    // ── उत्तर प्रकट करें ─────────────────────────────────────────
     function revealAnswer() {
         if (isRevealed) return;
         isRevealed = true;
@@ -276,56 +266,15 @@ document.addEventListener('DOMContentLoaded', () => {
         inputContainer.style.pointerEvents = 'none';
         answerInput.blur();
         nextBtn.focus();
-        
-        // Fetch explanation from server
-        fetchAndDisplayExplanation();
-    }
-    
-    // ── Fetch Explanation ─────────────────────────────────────
-    async function fetchAndDisplayExplanation() {
-        const q = currentQuestions[currentIndex];
-        
-        // Show loader
-        explanationLoader.classList.remove('hidden');
-        explanationCard.classList.add('hidden');
-        
-        try {
-            const response = await fetch(`${BACKEND_URL}/api/explain`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    question: q.question,
-                    answer: q.answer
-                })
-            });
-            
-            if (!response.ok) {
-                throw new Error(`Backend error: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            // Hide loader and show explanation
-            explanationLoader.classList.add('hidden');
-            explanationText.textContent = data.explanation || 'Explanation not available.';
-            explanationCard.classList.remove('hidden');
-        } catch (error) {
-            console.error('Error fetching explanation:', error);
-            explanationLoader.classList.add('hidden');
-            explanationText.textContent = 'Explanation could not be loaded. Please check your connection.';
-            explanationCard.classList.remove('hidden');
-        }
     }
 
-    // ── Navigation ────────────────────────────────────────────
+    // ── नेविगेशन ────────────────────────────────────────────
     function goToNext() {
         if (currentIndex < totalQuestions - 1) {
             currentIndex++;
             loadQuestion(currentIndex);
         } else {
-            alert('🎉 Congratulations! You\'ve completed all questions for this topic.');
+            alert('🎉 बधाई हो! आपने इस विषय के सभी प्रश्न पूरे कर लिए हैं।');
             showDashboard();
         }
     }
