@@ -1,10 +1,9 @@
 // Questions are loaded from questions_gemini.js (auto-generated from Gemini.txt)
 // const questions_gemini = { ukgk: [...], india_polity: [...], ... }
 
-// Backend URL - change this to your deployed backend URL
-const BACKEND_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000'
-    : 'https://general-knowledge-production.up.railway.app';
+// Gemini API Configuration
+const GEMINI_API_KEY = "AIzaSyCwHUsLaajbc36ip0wBDe-ptVfcoS7x5cY";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
 
 document.addEventListener('DOMContentLoaded', () => {
     // ── DOM Elements ──────────────────────────────────────────
@@ -290,34 +289,50 @@ document.addEventListener('DOMContentLoaded', () => {
         explanationCard.classList.add('hidden');
         
         try {
-            const url = `${BACKEND_URL}/api/explain`;
-            console.log('Fetching explanation from:', url);
+            const prompt = `For the following GK question and answer, provide a detailed and educational explanation that helps understand the topic better. Keep the explanation concise (2-3 sentences) but informative.
+
+Question: ${q.question}
+Answer: ${q.answer}
+
+Explanation:`;
             
-            const response = await fetch(url, {
+            const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    question: q.question,
-                    answer: q.answer
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
                 })
             });
             
             if (!response.ok) {
-                throw new Error(`Backend error: ${response.status} ${response.statusText}`);
+                throw new Error(`API error: ${response.status}`);
             }
             
             const data = await response.json();
             
+            // Extract explanation from Gemini response
+            let explanation = 'Explanation not available.';
+            if (data.candidates && data.candidates.length > 0) {
+                const candidate = data.candidates[0];
+                if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+                    explanation = candidate.content.parts[0].text;
+                }
+            }
+            
             // Hide loader and show explanation
             explanationLoader.classList.add('hidden');
-            explanationText.textContent = data.explanation || 'Explanation not available.';
+            explanationText.textContent = explanation;
             explanationCard.classList.remove('hidden');
         } catch (error) {
             console.error('Error fetching explanation:', error);
             explanationLoader.classList.add('hidden');
-            explanationText.textContent = `Error: ${error.message}. Please verify the backend is running and accessible at ${BACKEND_URL}`;
+            explanationText.textContent = `Error: ${error.message}`;
             explanationCard.classList.remove('hidden');
         }
     }
