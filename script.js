@@ -290,7 +290,10 @@ document.addEventListener('DOMContentLoaded', () => {
         explanationCard.classList.add('hidden');
         
         try {
-            const response = await fetch(`${BACKEND_URL}/api/explain`, {
+            const url = `${BACKEND_URL}/api/explain`;
+            console.log('Fetching explanation from:', url);
+            
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -302,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             if (!response.ok) {
-                throw new Error(`Backend error: ${response.status}`);
+                throw new Error(`Backend error: ${response.status} ${response.statusText}`);
             }
             
             const data = await response.json();
@@ -314,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error fetching explanation:', error);
             explanationLoader.classList.add('hidden');
-            explanationText.textContent = 'Explanation could not be loaded. Please check your connection.';
+            explanationText.textContent = `Error: ${error.message}. Please verify the backend is running and accessible at ${BACKEND_URL}`;
             explanationCard.classList.remove('hidden');
         }
     }
