@@ -1,5 +1,5 @@
-// प्रश्न questions_gemini.js से लोड किए जाते हैं (Gemini.txt से ऑटो-जेनरेट किए गए)
-// const questions_gemini = { ukgk: [...], india_polity: [...], ... }
+// प्रश्न questions_gemini_hi.js से लोड किए जाते हैं (Gemini.txt से ऑटो-जेनरेट किए गए हिंदी संस्करण)
+// const questions_gemini_hi = { ukgk: [...], india_polity: [...], ... }
 
 document.addEventListener('DOMContentLoaded', () => {
     // ── DOM तत्व ──────────────────────────────────────────────
@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let count = 0;
         if (topic === 'weak') {
             count = weakQuestions.length;
-        } else if (typeof questions_gemini !== 'undefined' && questions_gemini[topic]) {
-            count = questions_gemini[topic].length;
+        } else if (typeof questions_gemini_hi !== 'undefined' && questions_gemini_hi[topic]) {
+            count = questions_gemini_hi[topic].length;
         }
 
         if (count > 0 || topic === 'weak') {
@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let dataset = [];
         if (topic === 'weak') {
             dataset = [...weakQuestions];
-        } else if (typeof questions_gemini !== 'undefined' && questions_gemini[topic]) {
-            dataset = [...questions_gemini[topic]];
+        } else if (typeof questions_gemini_hi !== 'undefined' && questions_gemini_hi[topic]) {
+            dataset = [...questions_gemini_hi[topic]];
         }
 
         if (dataset.length === 0) {
