@@ -3,7 +3,7 @@
 
 // Gemini API Configuration
 const GEMINI_API_KEY = "AIzaSyCwHUsLaajbc36ip0wBDe-ptVfcoS7x5cY";
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
 document.addEventListener('DOMContentLoaded', () => {
     // ── DOM Elements ──────────────────────────────────────────
