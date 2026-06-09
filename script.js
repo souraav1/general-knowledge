@@ -4,7 +4,7 @@
 // Backend URL - change this to your deployed backend URL
 const BACKEND_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:5000'
-    : 'https://your-deployed-backend-url.com'; // Replace with your deployed URL
+    : 'https://general-knowledge-production.up.railway.app';
 
 document.addEventListener('DOMContentLoaded', () => {
     // ── DOM Elements ──────────────────────────────────────────
